@@ -4,7 +4,11 @@
      this for those who got scared away from the rather large and heavily
      commented icecast.xml.dist file. -->
 <icecast>
+    <location>Earth</location>
+    <admin>admin@localhost</admin>
+
     <limits>
+        <clients>100</clients>
         <sources>2</sources>
     </limits>
     <authentication>
