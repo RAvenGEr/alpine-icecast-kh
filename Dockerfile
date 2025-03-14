@@ -1,8 +1,7 @@
 FROM alpine:latest as builder
-LABEL maintainer "aaron@ghent.net.nz"
 
-ENV IC_VERSION "2.4.0-kh15"
-ENV IC_SHA512SUM "698332967a1a9c0c6b67a1e01f9cefe85741eb2ba62b692877ca4003c9bdcf6a32e90842246ae67c700a0bd2e7760ca53455b4197f46089649b6148b5894cc64"
+ENV IC_VERSION "2.4.0-kh22"
+ENV IC_SHA512SUM "80ed110cbb90e6fe709b2e7968d574525bde510817c874dd86c65b530a4abd7bc16036be31539a2871c266a4dec15f3d2ee80a21bcf66a77d2d483f0f133c842"
 
 WORKDIR /usr/local/src
 
@@ -48,8 +47,6 @@ COPY --from=builder /usr/bin/icecast /usr/bin/icecast
 COPY --from=builder /etc/icecast.xml /etc/icecast.xml
 COPY --from=builder /usr/share/icecast/admin/ /usr/share/icecast/admin/
 COPY --from=builder /usr/share/icecast/web/ /usr/share/icecast/web/
-
-COPY icecast.xml /etc/icecast.xml
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
