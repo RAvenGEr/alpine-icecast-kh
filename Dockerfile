@@ -1,22 +1,14 @@
-FROM alpine:latest as builder
-
-ENV IC_VERSION "2.4.0-kh22"
-ENV IC_SHA512SUM "80ed110cbb90e6fe709b2e7968d574525bde510817c874dd86c65b530a4abd7bc16036be31539a2871c266a4dec15f3d2ee80a21bcf66a77d2d483f0f133c842"
+FROM alpine:latest AS builder
 
 WORKDIR /usr/local/src
 
-RUN addgroup -S icecast && \
-    adduser -S icecast
-
-RUN wget https://github.com/karlheyes/icecast-kh/archive/icecast-$IC_VERSION.tar.gz -O icecast.tar.gz \
-    && echo "$IC_SHA512SUM  icecast.tar.gz" | sha512sum -c -
+COPY icecast-kh /usr/local/src/icecast-kh
 
 RUN apk add --no-cache \
     g++ make libxslt-dev libxml2-dev libogg-dev libvorbis-dev libtheora-dev \
     openssl-dev curl-dev curl git ca-certificates icecast
 
-RUN tar zxvf icecast.tar.gz \
-    && cd "icecast-kh-icecast-$IC_VERSION" \
+RUN cd icecast-kh \
     && ./configure \
 		--prefix=/usr \
 		--localstatedir=/var \
@@ -27,15 +19,8 @@ RUN tar zxvf icecast.tar.gz \
     && make \
     && make install \
     && cp examples/icecast_minimal.xml /etc/icecast.xml \
-    && chown -R icecast:icecast /etc/icecast.xml \
     && cp -R admin/ /usr/share/icecast/admin/ \ 
-    && chown -R icecast:icecast /usr/share/icecast/admin/ \
-    && cp -R web/ /usr/share/icecast/web/ \
-    && chown -R icecast:icecast /usr/share/icecast/web/
-
-WORKDIR /usr/local/src
-RUN rm -rf "icecast-kh-icecast-$IC_VERSION"
-
+    && cp -R web/ /usr/share/icecast/web/
 
 FROM alpine:latest  
 
@@ -54,4 +39,4 @@ RUN chmod +x /docker-entrypoint.sh
 EXPOSE 8000
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD icecast -c /etc/icecast.xml
+CMD ["icecast", "-c", "/etc/icecast.xml"]
