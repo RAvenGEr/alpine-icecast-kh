@@ -1,0 +1,3 @@
+[submodule "icecast-kh"]
+	path = icecast-kh
+	url = ../icecast-kh
