@@ -39,4 +39,4 @@ RUN chmod +x /docker-entrypoint.sh
 EXPOSE 8000
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["icecast", "-c", "/etc/icecast.xml"]
+CMD ["icecast", "-c", "/etc/icecast/icecast.xml"]
